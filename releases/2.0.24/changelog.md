@@ -1,0 +1,6 @@
+# Release 2.0.24
+
+- Fixed a bug where project-level skills were not loading when --setting-sources 'project' was specified
+- Claude Code Web: Support for Web -> CLI teleport
+- Sandbox: Releasing a sandbox mode for the BashTool on Linux & Mac
+- Bedrock: Display awsAuthRefresh output when auth is required
