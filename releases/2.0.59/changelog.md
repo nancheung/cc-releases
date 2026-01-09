@@ -1,0 +1,5 @@
+# Release 2.0.59
+
+- Added --agent CLI flag to override the agent setting for the current session
+- Added `agent` setting to configure main thread with a specific agent's system prompt, tool restrictions, and model
+- VS Code: Fixed .claude.json config file being read from incorrect location
