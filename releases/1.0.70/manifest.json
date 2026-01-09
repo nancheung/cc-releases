@@ -1,0 +1,26 @@
+{
+  "version": "1.0.70",
+  "buildDate": "2025-08-06T19:18:12Z",
+  "platforms": {
+    "darwin-arm64": {
+      "checksum": "17758d6ed22e2b101419b15b2924d84d64985a2605ff762de3386a60498bbfee",
+      "size": 76101648
+    },
+    "darwin-x64": {
+      "checksum": "e48910266368fa5f5d27b810f4e29d19702a4f2fd359171aa63ee41113c50e55",
+      "size": 81693920
+    },
+    "linux-arm64": {
+      "checksum": "764b961a0ed28bbd25b5e16c00308cef880952f697c344308bbc0e97344c2aa7",
+      "size": 133454280
+    },
+    "linux-x64": {
+      "checksum": "030a645b3c7c07da1b4861f1fac47ade8d1cc7ef742a146d6ddcd202545e4048",
+      "size": 138359067
+    },
+    "win32-x64": {
+      "checksum": "2fb80ebc645c2ac051b1ae25433329b08f5da8385111d0d8c6b6a11dee510e93",
+      "size": 157743616
+    }
+  }
+}
