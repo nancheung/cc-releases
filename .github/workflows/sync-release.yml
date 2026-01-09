@@ -1,0 +1,52 @@
+name: Sync Releases
+
+on:
+  workflow_call:
+    inputs:
+      versions:
+        required: true
+        type: string
+        description: 'JSON array of versions to sync'
+  workflow_dispatch:
+    inputs:
+      versions:
+        description: 'JSON array of versions, e.g. ["2.1.0","2.1.1"]'
+        required: true
+        type: string
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Create releases and push commits
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history needed for tags
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Configure Git
+        run: |
+          git config user.name "NanCheung"
+          git config user.email "i@nancheung.com"
+
+      - name: Sync releases
+        run: python scripts/sync_release.py '${{ inputs.versions }}'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        run: |
+          echo "### Sync Results" >> $GITHUB_STEP_SUMMARY
+          echo "Synced versions: ${{ inputs.versions }}" >> $GITHUB_STEP_SUMMARY

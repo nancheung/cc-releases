@@ -1,0 +1,46 @@
+name: Check for Updates
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Runs every 6 hours
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    outputs:
+      has_updates: ${{ steps.check.outputs.has_updates }}
+      versions: ${{ steps.check.outputs.versions }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Check for updates
+        id: check
+        run: python scripts/check_update.py
+
+      - name: Summary
+        run: |
+          echo "### Check Results" >> $GITHUB_STEP_SUMMARY
+          echo "- Has updates: ${{ steps.check.outputs.has_updates }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Versions: ${{ steps.check.outputs.versions }}" >> $GITHUB_STEP_SUMMARY
+
+  trigger-sync:
+    needs: check
+    if: needs.check.outputs.has_updates == 'true'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/sync-release.yml
+    with:
+      versions: ${{ needs.check.outputs.versions }}
+    secrets: inherit
