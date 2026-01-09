@@ -69,6 +69,7 @@ def download_version_files(
 ) -> list[Path]:
     """
     Download all platform artifacts for a version in parallel.
+    Returns empty list if manifest contains no platforms (fallback mode).
 
     Args:
         gcs_bucket: GCS_BUCKET base URL.
@@ -77,14 +78,25 @@ def download_version_files(
         dest_dir: Destination directory.
 
     Returns:
-        List of downloaded file paths.
+        List of downloaded file paths (empty list in fallback mode).
 
     Raises:
         RuntimeError: If any platform download fails.
     """
     platforms = manifest.get("platforms", {})
     if not platforms:
-        raise RuntimeError(f"Manifest for version [{version}] contains no platform info")
+        is_fallback = manifest.get("_fallback_mode", False)
+        if is_fallback:
+            log.warning(
+                f"Fallback mode detected for version [{version}]: "
+                f"skipping binary downloads (manifest unavailable)"
+            )
+        else:
+            log.warning(
+                f"Manifest for version [{version}] contains no platform info; "
+                f"returning empty file list"
+            )
+        return []
 
     log.info(f"Downloading version [{version}] artifacts for [{len(platforms)}] platforms...")
 

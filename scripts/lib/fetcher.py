@@ -5,6 +5,7 @@ Fetches the upstream `GCS_BUCKET` base URL and `manifest.json`.
 """
 
 import re
+import json
 import logging
 import requests
 
@@ -42,6 +43,7 @@ def get_gcs_bucket() -> str:
 def get_manifest(gcs_bucket: str, version: str) -> dict:
     """
     Fetch `manifest.json` for a given version.
+    Returns fallback structure on download failure instead of raising exception.
 
     Args:
         gcs_bucket: GCS_BUCKET base URL.
@@ -49,19 +51,30 @@ def get_manifest(gcs_bucket: str, version: str) -> dict:
 
     Returns:
         Manifest dict containing `platforms`.
-
-    Raises:
-        requests.HTTPError: If the request fails.
+        In fallback mode: {"version": "...", "buildDate": null, "platforms": {}, "_fallback_mode": True}
     """
     url = f"{gcs_bucket}/{version}/manifest.json"
     log.info(f"Fetching manifest: [{url}]")
 
-    resp = requests.get(url, timeout=REQUEST_TIMEOUT)
-    resp.raise_for_status()
+    try:
+        resp = requests.get(url, timeout=REQUEST_TIMEOUT)
+        resp.raise_for_status()
+        manifest = resp.json()
+        log.info(f"Version [{version}] contains [{len(manifest.get('platforms', {}))}] platforms")
+        return manifest
 
-    manifest = resp.json()
-    log.info(f"Version [{version}] contains [{len(manifest.get('platforms', {}))}] platforms")
-    return manifest
+    except (requests.RequestException, json.JSONDecodeError) as e:
+        log.warning(
+            f"Failed to fetch manifest for version [{version}]: {e}. "
+            f"Entering fallback mode (no binary downloads)"
+        )
+
+        return {
+            "version": version,
+            "buildDate": None,
+            "platforms": {},
+            "_fallback_mode": True
+        }
 
 
 def get_latest_version(gcs_bucket: str) -> str:

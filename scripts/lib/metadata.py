@@ -56,6 +56,12 @@ def save_version_metadata(
         with open(changelog_path, "w", encoding="utf-8") as f:
             # Write version title and release content
             f.write(f"# Release {version}\n\n")
+
+            # Add fallback mode warning if applicable
+            if manifest.get("_fallback_mode", False):
+                f.write("> **Note:** This release has no binary installers due to manifest.json fetch failure.\n")
+                f.write("> Please visit the official repository for downloads or wait for updates.\n\n")
+
             f.write(changelog_notes)
 
         log.info(f"Saved changelog: [{changelog_path}] ({len(changelog_notes)} characters)")

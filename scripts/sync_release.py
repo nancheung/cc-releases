@@ -97,12 +97,28 @@ def sync_one_version(
 
         manifest = get_manifest(gcs_bucket, version)
 
+        # Detect fallback mode
+        is_fallback = manifest.get("_fallback_mode", False)
+        if is_fallback:
+            log.info(
+                f"Version [{version}] entering fallback mode: "
+                f"manifest unavailable, will create release without binaries"
+            )
+
         with tempfile.TemporaryDirectory() as tmpdir:
             files = download_version_files(
                 gcs_bucket, version, manifest, Path(tmpdir)
             )
 
             notes = extract_notes(changelog_content, version)
+
+            # Add warning to Release notes in fallback mode
+            if is_fallback:
+                fallback_warning = (
+                    "> **⚠️ Warning:** This release has no binary installers due to upstream manifest.json fetch failure.\n"
+                    "> Please visit the [official repository](https://github.com/anthropics/claude-code) for downloads or wait for updates.\n\n"
+                )
+                notes = fallback_warning + notes
 
             # Save version metadata to releases/{version}/
             try:
