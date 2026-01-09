@@ -26,15 +26,21 @@ Automated mirror of [Claude Code](https://github.com/anthropics/claude-code) off
 
 | Platform | Architecture | File Pattern | Installation |
 |----------|-------------|--------------|--------------|
-| 🪟 **Windows** | x64 | `claude-{version}-win32-x64.exe` | Run executable |
-| 🍎 **macOS** | Apple Silicon (M1/M2/M3) | `claude-{version}-darwin-arm64` | Refer to [official docs](https://github.com/anthropics/claude-code) |
-| 🍎 **macOS** | Intel x64 | `claude-{version}-darwin-x64` | Refer to [official docs](https://github.com/anthropics/claude-code) |
-| 🐧 **Linux** | x64 (glibc) | `claude-{version}-linux-x64` | Refer to [official docs](https://github.com/anthropics/claude-code) |
-| 🐧 **Linux** | ARM64 (glibc) | `claude-{version}-linux-arm64` | Refer to [official docs](https://github.com/anthropics/claude-code) |
-| 🐧 **Linux** | x64 (musl) | `claude-{version}-linux-x64-musl` | Refer to [official docs](https://github.com/anthropics/claude-code) |
-| 🐧 **Linux** | ARM64 (musl) | `claude-{version}-linux-arm64-musl` | Refer to [official docs](https://github.com/anthropics/claude-code) |
+| 🪟 **Windows** | x64 | `claude-{version}-win32-x64.exe` | `.\claude-{version}-win32-x64.exe install` |
+| 🍎 **macOS** | Apple Silicon (M1/M2/M3) | `claude-{version}-darwin-arm64` | `chmod +x claude-{version}-darwin-arm64 && ./claude-{version}-darwin-arm64 install` |
+| 🍎 **macOS** | Intel x64 | `claude-{version}-darwin-x64` | `chmod +x claude-{version}-darwin-x64 && ./claude-{version}-darwin-x64 install` |
+| 🐧 **Linux** | x64 (glibc) | `claude-{version}-linux-x64` | `chmod +x claude-{version}-linux-x64 && ./claude-{version}-linux-x64 install` |
+| 🐧 **Linux** | ARM64 (glibc) | `claude-{version}-linux-arm64` | `chmod +x claude-{version}-linux-arm64 && ./claude-{version}-linux-arm64 install` |
+| 🐧 **Linux** | x64 (musl) | `claude-{version}-linux-x64-musl` | `chmod +x claude-{version}-linux-x64-musl && ./claude-{version}-linux-x64-musl install` |
+| 🐧 **Linux** | ARM64 (musl) | `claude-{version}-linux-arm64-musl` | `chmod +x claude-{version}-linux-arm64-musl && ./claude-{version}-linux-arm64-musl install` |
 
 > **Note:** musl builds are for Alpine Linux and other musl-based distributions
+
+> **Installation Notes:**
+> - **Windows**: Run the downloaded `.exe` file with the `install` command
+> - **macOS/Linux**: Grant execution permission with `chmod +x` before running
+> - Replace `{version}` with the actual version number (e.g., `1.0.112`)
+> - The `install` command sets up shell integration and the `claude` CLI launcher
 
 ### Browse All Versions
 
