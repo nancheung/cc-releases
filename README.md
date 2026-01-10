@@ -1,5 +1,7 @@
 # Claude Code Releases - Offline Installer Archive
 
+**[English](README.md) | [中文](README.zh-CN.md)**
+
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://github.com/nancheung/cc-releases/blob/main/LICENSE)
 [![CC release](https://img.shields.io/github/v/release/anthropics/claude-code?label=CC%20release)](https://github.com/anthropics/claude-code/releases)
 [![CCR release](https://img.shields.io/github/v/release/nancheung/cc-releases?label=CCR%20release)](https://github.com/nancheung/cc-releases/releases)
