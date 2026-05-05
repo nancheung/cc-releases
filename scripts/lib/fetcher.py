@@ -16,28 +16,38 @@ log = logging.getLogger(__name__)
 
 def get_gcs_bucket() -> str:
     """
-    Parse the official install script to extract the `GCS_BUCKET` URL.
+    Parse the official install script to extract the download base URL.
+
+    Supports both legacy `GCS_BUCKET` and current `DOWNLOAD_BASE_URL`.
 
     Returns:
-        GCS_BUCKET URL (without a trailing slash).
+        Download base URL (without a trailing slash).
 
     Raises:
         RuntimeError: If parsing fails.
     """
-    log.info("Fetching GCS_BUCKET URL...")
+    log.info("Fetching download base URL...")
 
     # `install.sh` may redirect to the actual script.
     resp = requests.get(INSTALL_SCRIPT_URL, timeout=REQUEST_TIMEOUT, allow_redirects=True)
     resp.raise_for_status()
 
-    # Extract `GCS_BUCKET="https://storage.googleapis.com/..."` from the script.
-    match = re.search(r'GCS_BUCKET="([^"]+)"', resp.text)
-    if not match:
-        raise RuntimeError("Failed to parse GCS_BUCKET from install script")
+    patterns = [
+        r'DOWNLOAD_BASE_URL\s*=\s*["\']([^"\']+)["\']',
+        r'GCS_BUCKET\s*=\s*["\']([^"\']+)["\']',
+    ]
 
-    bucket = match.group(1).rstrip("/")
-    log.info(f"GCS_BUCKET: [{bucket}]")
-    return bucket
+    for pattern in patterns:
+        match = re.search(pattern, resp.text)
+        if match:
+            bucket = match.group(1).rstrip("/")
+            log.info(f"Download base URL: [{bucket}]")
+            return bucket
+
+    raise RuntimeError(
+        "Failed to parse download base URL from install script "
+        "(checked DOWNLOAD_BASE_URL and GCS_BUCKET)"
+    )
 
 
 def get_manifest(gcs_bucket: str, version: str) -> dict:
