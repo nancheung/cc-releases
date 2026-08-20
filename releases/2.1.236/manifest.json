@@ -1,0 +1,77 @@
+{
+  "version": "2.1.236",
+  "commit": "82959839e9405dd642b4e3eaa6ef4101bf285fee",
+  "buildDate": "2026-08-19T16:49:51Z",
+  "platforms": {
+    "darwin-arm64": {
+      "binary": "claude",
+      "checksum": "6bc4ba992d2786cbf0237c4453ca53c1fdf0c3b3d83ffa0025c0d8190ed27848",
+      "size": 317044624
+    },
+    "darwin-x64": {
+      "binary": "claude",
+      "checksum": "3ce6a8e016fcae45ad3f2dc78f1980600d3908c302355396a0d6bc17b5d43333",
+      "size": 325726960
+    },
+    "linux-arm64": {
+      "binary": "claude",
+      "checksum": "c38d37deaf1643083326c48a6acc0afb09dada126e6bda77ef1a4410ae60ca12",
+      "size": 331798760
+    },
+    "linux-x64": {
+      "binary": "claude",
+      "checksum": "6c8818fa22187aa555c242be4abbacc44d6b71a32ac9631ee7b2b5d12f51f752",
+      "size": 334645552
+    },
+    "linux-arm64-musl": {
+      "binary": "claude",
+      "checksum": "56fe9241267b0187538a9cf7dafa0df12d94fd27789fa7207a59c2a0b4121b8f",
+      "size": 324943640
+    },
+    "linux-x64-musl": {
+      "binary": "claude",
+      "checksum": "979acf4877fa3dca24d6d15043022b5005cc8502fdb4c68992dd91651af31731",
+      "size": 328769504
+    },
+    "win32-x64": {
+      "binary": "claude.exe",
+      "checksum": "647e736f20c9ff0553c754624cbf8a6dcac196e8595509d8f63dce8bbe818757",
+      "size": 330097824
+    },
+    "win32-arm64": {
+      "binary": "claude.exe",
+      "checksum": "95726b1cb3bd6541a695e4d3ee00716b4e1e5157cdef0a3cbce614d5cc140e9d",
+      "size": 317997728
+    }
+  },
+  "sdkCompat": {
+    "testedWrapperVersions": [
+      "0.3.198",
+      "0.3.199",
+      "0.3.200",
+      "0.3.201",
+      "0.3.202",
+      "0.3.204",
+      "0.3.205",
+      "0.3.206",
+      "0.3.207",
+      "0.3.208",
+      "0.3.209",
+      "0.3.210",
+      "0.3.211",
+      "0.3.212",
+      "0.3.214",
+      "0.3.215",
+      "0.3.216",
+      "0.3.217",
+      "0.3.218",
+      "0.3.219",
+      "0.3.220",
+      "0.3.221",
+      "0.3.222",
+      "0.3.226",
+      "0.3.227"
+    ],
+    "harnessSchema": 1
+  }
+}
