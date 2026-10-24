@@ -31,18 +31,45 @@ Automated mirror of [Claude Code](https://github.com/anthropics/claude-code) off
 | 🪟 **Windows** | x64 | `claude-{version}-win32-x64.exe` | `.\claude-{version}-win32-x64.exe install` |
 | 🍎 **macOS** | Apple Silicon (M1/M2/M3) | `claude-{version}-darwin-arm64` | `chmod +x claude-{version}-darwin-arm64 && ./claude-{version}-darwin-arm64 install` |
 | 🍎 **macOS** | Intel x64 | `claude-{version}-darwin-x64` | `chmod +x claude-{version}-darwin-x64 && ./claude-{version}-darwin-x64 install` |
-| 🐧 **Linux** | x64 (glibc) | `claude-{version}-linux-x64` | `chmod +x claude-{version}-linux-x64 && ./claude-{version}-linux-x64 install` |
-| 🐧 **Linux** | ARM64 (glibc) | `claude-{version}-linux-arm64` | `chmod +x claude-{version}-linux-arm64 && ./claude-{version}-linux-arm64 install` |
-| 🐧 **Linux** | x64 (musl) | `claude-{version}-linux-x64-musl` | `chmod +x claude-{version}-linux-x64-musl && ./claude-{version}-linux-x64-musl install` |
-| 🐧 **Linux** | ARM64 (musl) | `claude-{version}-linux-arm64-musl` | `chmod +x claude-{version}-linux-arm64-musl && ./claude-{version}-linux-arm64-musl install` |
+| 🐧 **Linux** | x64 (glibc) | `claude-{version}-linux-x64` | [See Linux Offline Install](#linux-offline-install) |
+| 🐧 **Linux** | ARM64 (glibc) | `claude-{version}-linux-arm64` | [See Linux Offline Install](#linux-offline-install) |
+| 🐧 **Linux** | x64 (musl) | `claude-{version}-linux-x64-musl` | [See Linux Offline Install](#linux-offline-install) |
+| 🐧 **Linux** | ARM64 (musl) | `claude-{version}-linux-arm64-musl` | [See Linux Offline Install](#linux-offline-install) |
 
 > **Note:** musl builds are for Alpine Linux and other musl-based distributions
 
 > **Installation Notes:**
 > - **Windows**: Run the downloaded `.exe` file with the `install` command
-> - **macOS/Linux**: Grant execution permission with `chmod +x` before running
+> - **macOS**: Grant execution permission with `chmod +x` before running
+> - **Linux**: Follow [Linux Offline Install](#linux-offline-install) below — running `install` directly fails without network access
 > - Replace `{version}` with the actual version number (e.g., `1.0.112`)
 > - The `install` command sets up shell integration and the `claude` CLI launcher
+
+### Linux Offline Install
+
+Running `./claude-{version}-linux-x64 install` directly needs network access and fails offline. Place the binary into the versions directory first, then activate it with an **explicit version number**:
+
+```bash
+mkdir -p ~/.local/share/claude/versions
+install -m 755 claude-2.1.310-linux-x64 ~/.local/share/claude/versions/2.1.310
+~/.local/share/claude/versions/2.1.310 install 2.1.310
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
+claude --version                         # 2.1.310 (Claude Code)
+```
+
+- Replace `2.1.310` and `linux-x64` with your actual version and platform (`linux-arm64`, `linux-x64-musl`, `linux-arm64-musl`)
+- The version passed to `install` **must** match the file name under `versions/`
+- If you use zsh, replace `~/.bashrc` with `~/.zshrc`
+
+**Why it works this way** — inside the `install` subcommand:
+
+- Without an argument, the target defaults to `latest`, which is resolved to a version number online first. Offline, it fails right here: `Failed to fetch version from .../latest`
+- It then checks whether `~/.local/share/claude/versions/<version>` exists:
+  - **Missing** → `Downloading native installer version <version>`: it re-downloads from downloads.claude.ai into a staging directory, verifies it, and moves it into the versions directory. It does **not** reuse the running binary itself
+  - **Present** → it fetches the manifest online to re-verify the file. If the network is unreachable **and** a version was explicitly specified, it takes the `offline, activating as requested` branch and activates directly
+- Activation: creates the symlink `~/.local/bin/claude` → `versions/<version>` and writes `installMethod: native`
+
+> **Troubleshooting:** The installer locks the target path before downloading, so a failed offline attempt leaves a **0-byte file** under `versions/`. Check with `ls -l ~/.local/share/claude/versions/`, delete any 0-byte entry, then follow the steps above.
 
 ### Browse All Versions
 

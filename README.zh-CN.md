@@ -31,18 +31,45 @@
 | 🪟 **Windows** | x64 | `claude-{version}-win32-x64.exe` | `.\claude-{version}-win32-x64.exe install` |
 | 🍎 **macOS** | Apple Silicon (M1/M2/M3) | `claude-{version}-darwin-arm64` | `chmod +x claude-{version}-darwin-arm64 && ./claude-{version}-darwin-arm64 install` |
 | 🍎 **macOS** | Intel x64 | `claude-{version}-darwin-x64` | `chmod +x claude-{version}-darwin-x64 && ./claude-{version}-darwin-x64 install` |
-| 🐧 **Linux** | x64 (glibc) | `claude-{version}-linux-x64` | `chmod +x claude-{version}-linux-x64 && ./claude-{version}-linux-x64 install` |
-| 🐧 **Linux** | ARM64 (glibc) | `claude-{version}-linux-arm64` | `chmod +x claude-{version}-linux-arm64 && ./claude-{version}-linux-arm64 install` |
-| 🐧 **Linux** | x64 (musl) | `claude-{version}-linux-x64-musl` | `chmod +x claude-{version}-linux-x64-musl && ./claude-{version}-linux-x64-musl install` |
-| 🐧 **Linux** | ARM64 (musl) | `claude-{version}-linux-arm64-musl` | `chmod +x claude-{version}-linux-arm64-musl && ./claude-{version}-linux-arm64-musl install` |
+| 🐧 **Linux** | x64 (glibc) | `claude-{version}-linux-x64` | [见 Linux 离线安装](#linux-离线安装) |
+| 🐧 **Linux** | ARM64 (glibc) | `claude-{version}-linux-arm64` | [见 Linux 离线安装](#linux-离线安装) |
+| 🐧 **Linux** | x64 (musl) | `claude-{version}-linux-x64-musl` | [见 Linux 离线安装](#linux-离线安装) |
+| 🐧 **Linux** | ARM64 (musl) | `claude-{version}-linux-arm64-musl` | [见 Linux 离线安装](#linux-离线安装) |
 
 > **注意：** musl 构建版本适用于 Alpine Linux 和其他基于 musl 的发行版
 
 > **安装说明：**
 > - **Windows**：使用 `install` 命令运行下载的 `.exe` 文件
-> - **macOS/Linux**：运行前使用 `chmod +x` 授予执行权限
+> - **macOS**：运行前使用 `chmod +x` 授予执行权限
+> - **Linux**：请按下方 [Linux 离线安装](#linux-离线安装) 的步骤操作，直接运行 `install` 在离线环境下会失败
 > - 将 `{version}` 替换为实际版本号（例如 `1.0.112`）
 > - `install` 命令会设置 shell 集成和 `claude` CLI 启动器
+
+### Linux 离线安装
+
+直接运行 `./claude-{version}-linux-x64 install` 需要联网，离线时会失败。正确做法是先把二进制放进版本目录，再用**明确的版本号**激活：
+
+```bash
+mkdir -p ~/.local/share/claude/versions
+install -m 755 claude-2.1.310-linux-x64 ~/.local/share/claude/versions/2.1.310
+~/.local/share/claude/versions/2.1.310 install 2.1.310
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc && source ~/.bashrc
+claude --version                         # 2.1.310 (Claude Code)
+```
+
+- 将 `2.1.310` 和 `linux-x64` 替换为实际版本号和平台（`linux-arm64`、`linux-x64-musl`、`linux-arm64-musl`）
+- `install` 后面的版本号**必须**和 `versions/` 下的文件名一致
+- 如果使用 zsh，把 `~/.bashrc` 换成 `~/.zshrc`
+
+**原因** —— `install` 子命令内部：
+
+- `install` 不带参数时，target 默认为 `latest`，先联网解析出版本号（离线时在这里就失败：`Failed to fetch version from .../latest`）
+- 核心函数会检查 `~/.local/share/claude/versions/<版本>` 是否存在：
+  - **不存在** → `Downloading native installer version <版本>`，从 downloads.claude.ai 重新下载到 staging 目录，校验后移入版本目录。它**不会**复用正在运行的自身文件
+  - **已存在** → 联网拉 manifest 复验这份文件；如果网络不可达、**而且**用户明确指定了版本号，就走 `offline, activating as requested` 分支，直接激活
+- 激活：创建 `~/.local/bin/claude` → `versions/<版本>` 软链，并写入 `installMethod: native`
+
+> **排障：** 下载前会先对目标路径加锁，所以离线失败时会在 `versions/` 下留下一个 **0 字节文件**。可用 `ls -l ~/.local/share/claude/versions/` 检查，删掉 0 字节文件后再按上面的步骤安装。
 
 ### 浏览所有版本
 
