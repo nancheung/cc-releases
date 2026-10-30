@@ -1,0 +1,77 @@
+{
+  "version": "2.1.314",
+  "manifestSignatureEnforcement": "flag",
+  "commit": "5c99a5b6399766569a32979c715862fdb61c7efa",
+  "buildDate": "2026-10-29T23:00:10Z",
+  "platforms": {
+    "darwin-arm64": {
+      "binary": "claude",
+      "checksum": "21d6e7b9a6f07b4cfcb7df13760b3b72aa25e084e13a5354413382987ba832ed",
+      "size": 278848096
+    },
+    "darwin-x64": {
+      "binary": "claude",
+      "checksum": "404779a308a358ecec8b25c8bccf0ce79a94cf261d12cb74065518d189c174f8",
+      "size": 290710016
+    },
+    "linux-arm64": {
+      "binary": "claude",
+      "checksum": "a66c0a8f5d0c87a439953d797985192bbcbaefbce2e0d7b2eaa8df30ef0f3ef2",
+      "size": 297067016
+    },
+    "linux-x64": {
+      "binary": "claude",
+      "checksum": "4487042b4c4f5d88d4568f68ae98aae0b1ffae58864cf57fb868641bc5f84594",
+      "size": 298229464
+    },
+    "linux-arm64-musl": {
+      "binary": "claude",
+      "checksum": "95b14da22c20a6b4c5b24c8ff08993ac44663a0f52dd262086482ec1a3352d38",
+      "size": 287595856
+    },
+    "linux-x64-musl": {
+      "binary": "claude",
+      "checksum": "b7a970a6e1fde58d8032723f0f4ebdc9dd9aa66150534344e5d01d32c1f5813f",
+      "size": 289338976
+    },
+    "win32-x64": {
+      "binary": "claude.exe",
+      "checksum": "66e00df32e6981f686a91f67287fcc86e6e1b80ba4973a7b7c4aa43c59986cfa",
+      "size": 301388448
+    },
+    "win32-arm64": {
+      "binary": "claude.exe",
+      "checksum": "7bb0bc6be25e71e7aa3be2dfa537fd4c9c06d4565eb4446b6b748a74ea0d3a28",
+      "size": 285591200
+    }
+  },
+  "sdkCompat": {
+    "testedWrapperVersions": [
+      "0.3.281",
+      "0.3.282",
+      "0.3.283",
+      "0.3.284",
+      "0.3.285",
+      "0.3.286",
+      "0.3.287",
+      "0.3.288",
+      "0.3.289",
+      "0.3.290",
+      "0.3.291",
+      "0.3.292",
+      "0.3.293",
+      "0.3.294",
+      "0.3.295",
+      "0.3.296",
+      "0.3.299",
+      "0.3.300",
+      "0.3.301",
+      "0.3.302",
+      "0.3.303",
+      "0.3.304",
+      "0.3.305",
+      "0.3.306"
+    ],
+    "harnessSchema": 1
+  }
+}
